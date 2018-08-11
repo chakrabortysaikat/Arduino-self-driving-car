@@ -1,0 +1,131 @@
+#define lf 3 //left motor forward
+#define lb 5 //left motor backward
+#define rf 6 //right motor forward
+#define rb 9 //right motor backward
+#define li 2 //left green indicator
+#define ri 4 //right green indicator
+#define fi 7 //forward indicator
+#define bi 8 //backward indicator
+int speed;
+char s;
+void setup()
+{
+  Serial.begin(9600);
+  pinMode(lf,OUTPUT);
+  pinMode(lb,OUTPUT);
+  pinMode(rf,OUTPUT);
+  pinMode(rb,OUTPUT);
+  pinMode(li,OUTPUT);
+  pinMode(ri,OUTPUT);
+  pinMode(fi,OUTPUT);
+  pinMode(bi,OUTPUT);
+}
+void left(int z)
+{
+  int r=z;
+ analogWrite(rf,r);
+  analogWrite(rb,0);
+  analogWrite(lf,0);
+  analogWrite(lb,0);
+  //for left indicator
+    digitalWrite(li,HIGH);
+    delay(150);
+    digitalWrite(li,LOW);
+    delay(150);
+}
+void right(int p)
+{
+  int r=p;
+  analogWrite(lf,r);
+  analogWrite(lb,0);
+  analogWrite(rf,0);
+  analogWrite(rb,0);
+  //for right indicator
+    digitalWrite(ri,HIGH);
+    delay(150);
+    digitalWrite(ri,LOW);
+    delay(150);
+}
+void forward(int m)
+{
+  int r=m;
+  analogWrite(rf,r);
+  analogWrite(lf,r);
+  analogWrite(rb,0);
+  analogWrite(lb,0);
+    digitalWrite(fi,HIGH);
+    delay(150);
+    digitalWrite(fi,LOW);
+    delay(150);//for forward indicator
+}
+void backward(int n)
+{
+  int r=n;
+  analogWrite(rf,0);
+  analogWrite(rb,r);
+  analogWrite(lf,0);
+  analogWrite(lb,r);
+    digitalWrite(bi,HIGH);
+    delay(150);
+    digitalWrite(bi,LOW);
+    delay(150);
+}
+void stop()
+{
+  analogWrite(rf,0);
+  analogWrite(rb,0);
+  analogWrite(lf,0);
+  analogWrite(lb,0);
+}
+void loop()
+{
+  if(Serial.available())
+  {
+    char ch=Serial.read();
+    s=ch; 
+     if(s=='0')
+     speed=0;
+     else if(s=='1')
+     speed=25;
+     else if(s=='2')
+     speed=50;
+     else if(s=='3')
+     speed=75;
+     else if(s=='4')
+     speed=100;
+     else if(s=='5')
+     speed=125;
+     else if(s=='6')
+     speed=150;
+     else if(s=='7')
+     speed=175;
+     else if(s=='8')
+     speed=200;
+     else if(s=='9')
+     speed=225;
+     else if(s=='q')
+     speed=255;
+  if(s=='F')
+  {
+    int t=speed;
+  forward(t);
+  }
+  else if(s=='B')
+  {
+    int t=speed;
+  backward(speed);
+  }
+  else if(s=='L')
+  {
+    int t=speed;
+    left(t);
+  }
+  else if(s=='R')
+  {
+    int t=speed;
+    right(t);
+  }
+  else
+    stop();
+}
+}//114 lines
